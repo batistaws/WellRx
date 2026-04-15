@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/WellRx/pacientes")
@@ -23,9 +24,9 @@ public class PacienteController {
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<ListagemPacienteDto> cadastrar(@RequestBody @Valid CadastroPacienteDto dto) {
-
+    public ResponseEntity<ListagemPacienteDto> cadastrar(@RequestBody @Valid CadastroPacienteDto dto, UriComponentsBuilder componentsBuilder) {
         var paciente = service.cadastrar(dto);
-        return ResponseEntity.ok(pacienteCadastrado);
+        var uri = componentsBuilder.path("/WellRx/pacientes/{nomeCompleto}").buildAndExpand(paciente.getId()).toUri();
+        return ResponseEntity.created(uri).body(new ListagemPacienteDto(paciente));
     }
 }
