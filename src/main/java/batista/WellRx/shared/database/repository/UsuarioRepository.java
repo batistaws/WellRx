@@ -1,4 +1,9 @@
 package batista.WellRx.shared.database.repository;
 
-public class UsuarioRepository {
+import batista.WellRx.shared.database.model.Usuario;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+
+
 }
