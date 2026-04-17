@@ -1,5 +1,6 @@
 package batista.WellRx.shared.database.model;
 
+import batista.WellRx.clinica.dto.CadastroMedicoDto;
 import batista.WellRx.clinica.dto.CadastroPacienteDto;
 import batista.WellRx.infra.exeption.RegraNegocioException;
 import jakarta.persistence.*;
@@ -42,7 +43,7 @@ public class Usuario implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "perfil_id"))
     private List<Perfil> perfis = new ArrayList<>();
 
-    public Usuario(@Valid CadastroPacienteDto dto, String senhaCriptografada, Perfil perfil) {
+    public Usuario(CadastroPacienteDto dto, String senhaCriptografada, Perfil perfil) {
 
          this.email = dto.email();
          this.senha = senhaCriptografada;
@@ -52,6 +53,18 @@ public class Usuario implements UserDetails {
          this.expiracaoToken = LocalDateTime.now().plusMinutes(50);
          this.ativo = false;
          this.perfis.add(perfil);
+    }
+
+    public Usuario(CadastroMedicoDto dto, String senhaCriptografada, Perfil perfil) {
+
+        this.email = dto.email();
+        this.senha = senhaCriptografada;
+        this.cpf = dto.cpf();
+        this.verificado = false;
+        this.token = java.util.UUID.randomUUID().toString();
+        this.expiracaoToken = LocalDateTime.now().plusMinutes(50);
+        this.ativo = false;
+        this.perfis.add(perfil);
     }
 
     @Override

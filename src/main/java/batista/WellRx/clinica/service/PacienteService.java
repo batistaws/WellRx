@@ -4,6 +4,7 @@ import batista.WellRx.clinica.database.model.Paciente;
 import batista.WellRx.clinica.database.repository.PacienteRepository;
 import batista.WellRx.clinica.dto.CadastroPacienteDto;
 import batista.WellRx.clinica.dto.ListagemPacienteDto;
+import batista.WellRx.shared.database.model.PerfilEnum;
 import batista.WellRx.shared.database.model.Usuario;
 import batista.WellRx.shared.database.repository.PerfilRepository;
 import batista.WellRx.shared.database.repository.UsuarioRepository;
@@ -32,17 +33,19 @@ public class PacienteService {
     @Transactional
     public Paciente cadastrar(@Valid CadastroPacienteDto dto) {
 
-        Optional<Usuario> optionalUsuario = usuarioRepository.findByCpfAndVerificadoTrue(dto.email());
+        Optional<Usuario> optionalUsuario = usuarioRepository.findByCpfAndVerificadoTrue(dto.cpf());
         if (optionalUsuario.isPresent()) {
-            throw new RuntimeException("Já existe uma conta cadastrada com esse cpf ou nome de usuário!");
+            throw new RuntimeException("Já existe uma conta cadastrada com esse cpf");
         }
 
-        if (dto.senha() != dto.confirmacaoSenha()){
+        if (!dto.senha().equals(dto.confirmacaoSenha())){
             throw new RuntimeException("Senha não bate com a confirmação!");
         }
 
         String senhaCriptografada = passwordEncoder.encode(dto.senha());
-        var perfil = perfilRepository.findByNome("PACIENTE");
+        var perfil = perfilRepository.findByNome(PerfilEnum.PACIENTE)
+                .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
+
         var usuario = new Usuario(dto, senhaCriptografada, perfil);
         usuarioRepository.save(usuario);
 

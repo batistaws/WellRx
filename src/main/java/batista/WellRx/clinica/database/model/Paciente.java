@@ -26,6 +26,7 @@ public class Paciente {
     private Long id;
 
     private String nomeCompleto;
+    private String cpf;
     private String telefone;
     private LocalDate dataNascimento;
 
@@ -41,6 +42,7 @@ public class Paciente {
 
     public Paciente(@Valid CadastroPacienteDto dto, Usuario usuario) {
         this.nomeCompleto = dto.nomeCompleto();
+        this.cpf = dto.cpf();
         this.telefone = dto.telefone();
         this.dataNascimento = dto.dataNascimento();
         this.sexo = dto.sexo();

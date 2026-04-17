@@ -2,6 +2,7 @@ package batista.WellRx.infra.seguranca;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -34,14 +36,20 @@ public class ConfigSecurity {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .authorizeHttpRequests(
+                        req -> {
+                            req.requestMatchers(HttpMethod.POST, "/login", "/medicos/cadastrar", "/pacientes/cadastrar").permitAll()
 
+                            .anyRequest().authenticated();
 
+                }
+                )
 
                 .csrf(AbstractHttpConfigurer::disable)  //informações enviadas via formulário precisa ter o csrf ativado.
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 //adicionar a cadeia de filtro do token ates da cadeia de filtro do spring
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) //
+                //.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) //
                 .build();
     }
     @Bean

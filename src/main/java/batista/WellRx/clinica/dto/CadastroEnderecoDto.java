@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 
 public record CadastroEnderecoDto(
 
-        @NotBlank String logadouro,
+        @NotBlank String logradouro,
         @NotBlank String bairro,
         @NotBlank @Pattern(regexp = "\\d{8}") String cep,
         @NotBlank String cidade,
@@ -15,7 +15,7 @@ public record CadastroEnderecoDto(
         String complemento
 ) {
     public CadastroEnderecoDto(Endereco endereco) {
-        this(endereco.getLogadouro(), endereco.getBairro(), endereco.getCep(), endereco.getCidade(), endereco.getEstado(), endereco.getNumero(), endereco.getComplemento());
+        this(endereco.getLogradouro(), endereco.getBairro(), endereco.getCep(), endereco.getCidade(), endereco.getEstado(), endereco.getNumero(), endereco.getComplemento());
     }
 }
 
