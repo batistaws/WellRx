@@ -1,5 +1,7 @@
 package batista.WellRx.shared.controller;
 
+import batista.WellRx.clinica.dto.DadosPerfil;
+import batista.WellRx.clinica.dto.ListagemUsuarioDto;
 import batista.WellRx.infra.seguranca.TokenService;
 import batista.WellRx.shared.database.model.Usuario;
 import batista.WellRx.shared.database.repository.UsuarioRepository;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/wellrx")
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
     private final UsuarioService service;
@@ -40,6 +42,18 @@ public class UsuarioController {
         var refreshToken = tokenService.gerarRefreshToken((Usuario) authentication.getPrincipal());
 
         return ResponseEntity.ok(new DadosTokenDto(token, refreshToken));
+    }
+
+    @PatchMapping("/adiconar-perfil/{id}")
+    public ResponseEntity<ListagemUsuarioDto> adicionarPerfil(@RequestBody @Valid DadosPerfil dto, @PathVariable Long id) {
+        var usuario = service.adicionarPerfil(dto, id);
+        return ResponseEntity.ok(new ListagemUsuarioDto(usuario));
+    }
+
+    @PatchMapping("/remover-perfil/{id}")
+    public ResponseEntity<ListagemUsuarioDto> removerPerfil(@RequestBody @Valid DadosPerfil dto, @PathVariable Long id) {
+        var usuario = service.removerPerfil(dto, id);
+        return ResponseEntity.ok(new ListagemUsuarioDto(usuario));
     }
 
     @PostMapping("/atualizar-token")

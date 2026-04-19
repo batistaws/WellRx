@@ -52,4 +52,5 @@ public class Medico {
         this.endereco = new Endereco(dto.endereco());
         this.usuario = usuario;
     }
+    
 }

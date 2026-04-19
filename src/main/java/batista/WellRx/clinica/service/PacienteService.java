@@ -3,6 +3,7 @@ package batista.WellRx.clinica.service;
 import batista.WellRx.clinica.database.model.Paciente;
 import batista.WellRx.clinica.database.repository.PacienteRepository;
 import batista.WellRx.clinica.dto.CadastroPacienteDto;
+import batista.WellRx.clinica.dto.DadosPerfil;
 import batista.WellRx.clinica.dto.ListagemPacienteDto;
 import batista.WellRx.shared.database.model.PerfilEnum;
 import batista.WellRx.shared.database.model.Usuario;
@@ -53,4 +54,6 @@ public class PacienteService {
         return pacienteRepository.save(paciente);
 
     }
+
+
 }

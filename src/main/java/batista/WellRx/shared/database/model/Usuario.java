@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -29,6 +30,7 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String nomeCompleto;
     private String cpf;
     private String email;
     private String senha;
@@ -45,6 +47,7 @@ public class Usuario implements UserDetails {
 
     public Usuario(CadastroPacienteDto dto, String senhaCriptografada, Perfil perfil) {
 
+         this.nomeCompleto = dto.nomeCompleto();
          this.email = dto.email();
          this.senha = senhaCriptografada;
          this.cpf = dto.cpf();
@@ -57,6 +60,7 @@ public class Usuario implements UserDetails {
 
     public Usuario(CadastroMedicoDto dto, String senhaCriptografada, Perfil perfil) {
 
+        this.nomeCompleto = dto.nomeCompleto();
         this.email = dto.email();
         this.senha = senhaCriptografada;
         this.cpf = dto.cpf();
@@ -88,5 +92,13 @@ public class Usuario implements UserDetails {
         }
 
         this.verificado = true;
+    }
+
+    public void adicionarPerfil(Optional<Perfil> perfil) {
+        perfis.add(perfil.orElseThrow(() -> new RegraNegocioException("Perfil não encontrado!")));
+    }
+
+    public void removerPerfil(Optional<Perfil> perfil) {
+        perfis.remove(perfil.orElseThrow(() -> new RegraNegocioException("Perfil não encontrado!")));
     }
 }

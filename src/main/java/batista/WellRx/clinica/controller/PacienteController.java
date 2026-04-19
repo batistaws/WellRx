@@ -2,14 +2,13 @@ package batista.WellRx.clinica.controller;
 
 
 import batista.WellRx.clinica.dto.CadastroPacienteDto;
+import batista.WellRx.clinica.dto.DadosPerfil;
 import batista.WellRx.clinica.dto.ListagemPacienteDto;
+import batista.WellRx.clinica.dto.ListagemUsuarioDto;
 import batista.WellRx.clinica.service.PacienteService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
@@ -29,4 +28,6 @@ public class PacienteController {
         var uri = componentsBuilder.path("/pacientes/{nomeCompleto}").buildAndExpand(paciente.getId()).toUri();
         return ResponseEntity.created(uri).body(new ListagemPacienteDto(paciente));
     }
+
+
 }
