@@ -38,7 +38,7 @@ public class ConfigSecurity {
         return httpSecurity
                 .authorizeHttpRequests(
                         req -> {
-                            req.requestMatchers(HttpMethod.POST, "/usuarios/login", "/medicos/cadastrar", "/pacientes/cadastrar").permitAll();
+                            req.requestMatchers(HttpMethod.POST, "/usuarios/login", "/medicos/cadastrar", "/pacientes/cadastrar", "/recepcionistas/cadastrar").permitAll();
                             req.requestMatchers(HttpMethod.PATCH,   "/usuarios/adiconar-perfil/{id}", "/usuarios/remover-perfil/{id}").permitAll()
                             .anyRequest().authenticated();
 

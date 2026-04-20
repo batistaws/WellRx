@@ -1,7 +1,7 @@
 package batista.WellRx.shared.controller;
 
 import batista.WellRx.clinica.dto.DadosPerfil;
-import batista.WellRx.clinica.dto.ListagemUsuarioDto;
+import batista.WellRx.shared.dto.ListagemUsuarioDto;
 import batista.WellRx.infra.seguranca.TokenService;
 import batista.WellRx.shared.database.model.Usuario;
 import batista.WellRx.shared.database.repository.UsuarioRepository;
@@ -31,6 +31,7 @@ public class UsuarioController {
         this.manager = manager;
         this.tokenService = tokenService;
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<DadosTokenDto> login(@RequestBody @Valid EfetuarLoginDto dto) {

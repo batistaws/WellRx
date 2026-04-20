@@ -1,4 +1,4 @@
-package batista.WellRx.clinica.dto;
+package batista.WellRx.shared.dto;
 
 import batista.WellRx.shared.database.model.Usuario;
 

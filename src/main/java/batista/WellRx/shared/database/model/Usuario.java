@@ -2,10 +2,9 @@ package batista.WellRx.shared.database.model;
 
 import batista.WellRx.clinica.dto.CadastroMedicoDto;
 import batista.WellRx.clinica.dto.CadastroPacienteDto;
+import batista.WellRx.clinica.dto.CadastroRecepcionistaDto;
 import batista.WellRx.infra.exeption.RegraNegocioException;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -59,6 +58,19 @@ public class Usuario implements UserDetails {
     }
 
     public Usuario(CadastroMedicoDto dto, String senhaCriptografada, Perfil perfil) {
+
+        this.nomeCompleto = dto.nomeCompleto();
+        this.email = dto.email();
+        this.senha = senhaCriptografada;
+        this.cpf = dto.cpf();
+        this.verificado = false;
+        this.token = java.util.UUID.randomUUID().toString();
+        this.expiracaoToken = LocalDateTime.now().plusMinutes(50);
+        this.ativo = false;
+        this.perfis.add(perfil);
+    }
+
+    public Usuario(CadastroRecepcionistaDto dto, String senhaCriptografada, Perfil perfil) {
 
         this.nomeCompleto = dto.nomeCompleto();
         this.email = dto.email();

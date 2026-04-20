@@ -2,9 +2,7 @@ package batista.WellRx.clinica.controller;
 
 
 import batista.WellRx.clinica.dto.CadastroPacienteDto;
-import batista.WellRx.clinica.dto.DadosPerfil;
 import batista.WellRx.clinica.dto.ListagemPacienteDto;
-import batista.WellRx.clinica.dto.ListagemUsuarioDto;
 import batista.WellRx.clinica.service.PacienteService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
