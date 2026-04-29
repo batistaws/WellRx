@@ -1,5 +1,6 @@
 package batista.WellRx.clinica.database.model;
 
+import batista.WellRx.clinica.dto.AtualizacaoMedicoDto;
 import batista.WellRx.clinica.dto.CadastroMedicoDto;
 import batista.WellRx.shared.database.model.Usuario;
 import jakarta.persistence.*;
@@ -24,7 +25,10 @@ public class Medico {
     private String nomeCompleto;
     private String crm;
     private String cpf;
-    private String especialidade;
+
+    @Enumerated(EnumType.STRING)
+    private Especialidade especialidade;
+
     private String telefone;
     private LocalDate dataNascimento;
 
@@ -45,12 +49,20 @@ public class Medico {
         this.crm = dto.crm();
         this.cpf = dto.cpf();
         this.especialidade = dto.especialidade();
-        this.especialidade = dto.telefone();
-        this.dataNascimento = dto.dataNascimento();
         this.telefone = dto.telefone();
+        this.dataNascimento = dto.dataNascimento();
         this.sexo = dto.sexo();
         this.endereco = new Endereco(dto.endereco());
         this.usuario = usuario;
     }
-    
+
+    public Medico atualizarInformacoes(AtualizacaoMedicoDto dto) {
+        if (dto.telefone() != null) {
+            this.telefone = dto.telefone();
+        }
+        if (dto.endereco() != null) {
+            this.endereco.atualizarEndereco(dto.endereco());
+        }
+        return this;
+    }
 }

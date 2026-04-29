@@ -1,5 +1,6 @@
 package batista.WellRx.clinica.dto;
 
+import batista.WellRx.clinica.database.model.Especialidade;
 import batista.WellRx.clinica.database.model.Sexo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -22,11 +23,14 @@ public record CadastroMedicoDto(
         @NotBlank
         @Pattern(regexp = "\\d{4,6}/[A-Z]{2}" , message = "O CRM deve seguir o formato 0000/UF ou 000000/UF ")
         String crm,
-        @NotBlank
-        String especialidade,
+
+        @NotNull
+        Especialidade especialidade,
+
         @NotBlank
         @Pattern(regexp = "\\d{10,11}" , message = "O telefone deve conter apenas números e 11 dígitos, formato DDD999999999")
         String telefone,
+
         @NotBlank
         @Size(min = 14, max = 14, message = "O CPF deve ter exatamente 14 caracteres (formato 000.000.000-00)")
         String cpf,

@@ -53,7 +53,7 @@ public class Usuario implements UserDetails {
          this.verificado = false;
          this.token = java.util.UUID.randomUUID().toString();
          this.expiracaoToken = LocalDateTime.now().plusMinutes(50);
-         this.ativo = false;
+         this.ativo = true;
          this.perfis.add(perfil);
     }
 
@@ -66,7 +66,7 @@ public class Usuario implements UserDetails {
         this.verificado = false;
         this.token = java.util.UUID.randomUUID().toString();
         this.expiracaoToken = LocalDateTime.now().plusMinutes(50);
-        this.ativo = false;
+        this.ativo = true;
         this.perfis.add(perfil);
     }
 
@@ -79,7 +79,7 @@ public class Usuario implements UserDetails {
         this.verificado = false;
         this.token = java.util.UUID.randomUUID().toString();
         this.expiracaoToken = LocalDateTime.now().plusMinutes(50);
-        this.ativo = false;
+        this.ativo = true;
         this.perfis.add(perfil);
     }
 

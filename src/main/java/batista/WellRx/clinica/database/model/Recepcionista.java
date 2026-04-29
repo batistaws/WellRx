@@ -1,5 +1,6 @@
 package batista.WellRx.clinica.database.model;
 
+import batista.WellRx.clinica.dto.AtualizacaoRecepcionistaDto;
 import batista.WellRx.clinica.dto.CadastroPacienteDto;
 import batista.WellRx.clinica.dto.CadastroRecepcionistaDto;
 import batista.WellRx.shared.database.model.Usuario;
@@ -51,5 +52,18 @@ public class Recepcionista {
         this.endereco = new Endereco(dto.endereco());
         this.turno = dto.turno();
         this.usuario = usuario;
+    }
+
+    public Recepcionista atualizarInformacoes(AtualizacaoRecepcionistaDto dto) {
+        if (dto.telefone() != null) {
+            this.telefone = dto.telefone();
+        }
+        if (dto.ramal() != null) {
+            this.ramal = dto.ramal();
+        }
+        if (dto.endereco() != null) {
+            this.endereco.atualizarEndereco(dto.endereco());
+        }
+        return this;
     }
 }

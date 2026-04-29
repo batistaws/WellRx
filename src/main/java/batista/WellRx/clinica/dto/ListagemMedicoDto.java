@@ -1,5 +1,6 @@
 package batista.WellRx.clinica.dto;
 
+import batista.WellRx.clinica.database.model.Especialidade;
 import batista.WellRx.clinica.database.model.Medico;
 import batista.WellRx.clinica.database.model.Sexo;
 
@@ -12,7 +13,7 @@ public record ListagemMedicoDto(
         String email,
         String crm,
         String cpf,
-        String especialidade,
+        Especialidade especialidade,
         String telefone,
         LocalDate dataNascimento,
         CadastroEnderecoDto endereco,

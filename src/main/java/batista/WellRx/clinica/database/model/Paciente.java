@@ -1,5 +1,6 @@
 package batista.WellRx.clinica.database.model;
 
+import batista.WellRx.clinica.dto.AtualizacaoPacienteDto;
 import batista.WellRx.clinica.dto.CadastroPacienteDto;
 import batista.WellRx.shared.database.model.Usuario;
 import jakarta.persistence.*;
@@ -48,5 +49,15 @@ public class Paciente {
         this.sexo = dto.sexo();
         this.endereco = new Endereco(dto.endereco());
         this.usuario = usuario;
+    }
+
+    public Paciente atualizarInformacoes(AtualizacaoPacienteDto dto) {
+        if (dto.telefone() != null) {
+            this.telefone = dto.telefone();
+        }
+        if (dto.endereco() != null) {
+            this.endereco.atualizarEndereco(dto.endereco());
+        }
+        return this;
     }
 }
