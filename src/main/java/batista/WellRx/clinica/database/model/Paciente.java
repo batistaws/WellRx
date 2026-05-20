@@ -4,7 +4,6 @@ import batista.WellRx.clinica.dto.AtualizacaoPacienteDto;
 import batista.WellRx.clinica.dto.CadastroPacienteDto;
 import batista.WellRx.shared.database.model.Usuario;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

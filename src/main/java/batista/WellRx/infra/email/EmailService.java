@@ -35,7 +35,7 @@ public class EmailService {
                 + "Por favor clique no link abaixo para verificar sua conta:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFICAR</a></h3>"
                 + "Obrigado,<br>"
-                + "Fórum Hub :).", usuario.getNomeCompleto(), URL_SITE + "/verificar-conta?token=" + usuario.getToken());
+                + "Fórum Hub :).", usuario.getNomeCompleto(), URL_SITE + "/usuarios/verificar-conta?token=" + usuario.getToken());
 
         enviarEmail(usuario.getEmail(), assunto, conteudo);
     }

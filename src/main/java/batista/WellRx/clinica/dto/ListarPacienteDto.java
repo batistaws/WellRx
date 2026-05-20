@@ -1,7 +1,6 @@
 package batista.WellRx.clinica.dto;
 
 import batista.WellRx.clinica.database.model.Paciente;
-import batista.WellRx.clinica.database.model.Recepcionista;
 
 public record ListarPacienteDto(
 

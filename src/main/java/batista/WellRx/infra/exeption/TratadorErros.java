@@ -34,7 +34,8 @@ public class TratadorErros {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> tratarErro403(AccessDeniedException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)        // Substitua ex.getMessage() pela sua mensagem em formato JSON
+                .body("Acesso negado: Você não tem permissão para acessar este recurso.");
     }
 
     @ExceptionHandler(AuthenticationException.class)

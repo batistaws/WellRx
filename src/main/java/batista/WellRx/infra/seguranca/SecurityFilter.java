@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -33,7 +34,9 @@ public class SecurityFilter extends OncePerRequestFilter {
             //validação do token
             //vai ser responsavel por validar o token e autenticar o usuario no spring security
             String username = tokenService.verificarToken(token);
-            var user = usuarioRepository.findByEmailIgnoreCaseAndVerificadoTrue(username).orElseThrow();
+            var user = usuarioRepository.findByCpfIgnoreCaseAndVerificadoTrue(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+
 
             var authentication = new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
 

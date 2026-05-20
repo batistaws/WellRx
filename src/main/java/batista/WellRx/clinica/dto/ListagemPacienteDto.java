@@ -1,6 +1,5 @@
 package batista.WellRx.clinica.dto;
 
-import batista.WellRx.clinica.database.model.Endereco;
 import batista.WellRx.clinica.database.model.Paciente;
 import batista.WellRx.clinica.database.model.Sexo;
 

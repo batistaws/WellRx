@@ -8,6 +8,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -23,7 +24,8 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("WellRx")
                     .withSubject(usuario.getUsername())
-                    .withExpiresAt(expiracao(50))
+                    .withClaim("roles", usuario.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+                    .withExpiresAt(dataExpiracao(50))
                     .sign(algorithm);
         } catch (
                 JWTCreationException exception) {
@@ -36,7 +38,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("WellRx")
                     .withSubject(usuario.getId().toString())
-                    .withExpiresAt(expiracao(120))
+                    .withExpiresAt(dataExpiracao(120))
                     .sign(algorithm);
         } catch (
                 JWTCreationException exception) {
@@ -60,7 +62,7 @@ public class TokenService {
     }
 
     //método de expiração do token
-    private Instant expiracao(int minutos) {
+    private Instant dataExpiracao(int minutos) {
         return LocalDateTime.now().plusMinutes(minutos).toInstant(ZoneOffset.of("-03:00"));
     }
 
