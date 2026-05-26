@@ -3,6 +3,7 @@ package batista.WellRx.infra.seguranca;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -30,16 +31,12 @@ public class ConfigSecurity {
     private final HandlerExceptionResolver resolver;
     private final SecurityFilter securityFilter;
 
-    public ConfigSecurity( @Qualifier("handlerExceptionResolver")HandlerExceptionResolver resolver, SecurityFilter securityFilter) {
+    public ConfigSecurity( @Qualifier("handlerExceptionResolver")HandlerExceptionResolver resolver, @Lazy SecurityFilter securityFilter) {
         this.resolver = resolver;
         this.securityFilter = securityFilter;
     }
 
-    //Usado para autenticar o login
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -80,6 +77,12 @@ public class ConfigSecurity {
     @Bean
     public PasswordEncoder encripitador(){
         return new BCryptPasswordEncoder();
+    }
+
+    //Usado para autenticar o login
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
     @Bean

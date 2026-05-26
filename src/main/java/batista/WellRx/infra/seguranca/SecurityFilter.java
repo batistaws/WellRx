@@ -6,10 +6,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -18,31 +22,32 @@ import java.io.IOException;
 //filtro q filtra as requisições uma vez a cada requisiçao
 public class SecurityFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private TokenService tokenService;
+    @Lazy
+    private final TokenService tokenService;
+    private final UserDetailsService userDetailsService;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    public SecurityFilter(TokenService tokenService, UserDetailsService userDetailsService) {
+        this.tokenService = tokenService;
+        this.userDetailsService = userDetailsService;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        //recuperar o token da requisição
-        //para ver se o cliente enviou um token JWT no cabeçalho
-        String token = recuperarTokenRequicao(request);
-        if (token != null){
-            //validação do token
-            //vai ser responsavel por validar o token e autenticar o usuario no spring security
-            String username = tokenService.verificarToken(token);
-            var user = usuarioRepository.findByCpfIgnoreCaseAndVerificadoTrue(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
+        String authorizationHeader = request.getHeader("Authorization");
+        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")){
+            String token = authorizationHeader.substring(7);
 
-            var authentication = new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
-
-            //como API REST é stateles, não fica "gravado" o usuário q esta usando requisições, isso vai servir para q o token seja vereficado a cada requisiçaõ
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
+            if (tokenService.validarToken(token)){
+                String username = tokenService.getUsername(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
         }
 
         //pode passar a proxima parte para o proximo filter ou pro proximo controlador
