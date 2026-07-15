@@ -53,7 +53,7 @@ public class RecepcionistaService {
 
         Optional<Usuario> optionalUsuario = usuarioRepository.findByCpfAndVerificadoTrue(dto.cpf());
 
-        if (!hierarquiaService.usuarioTemPermissao(logado, "ADMIN")) {
+        if (!hierarquiaService.usuarioTemPermissao(logado, "ROLE_ADMIN")) {
             throw new RegraNegocioException("Acesso negado: Apenas administradores podem cadastrar novos recepcionistas.");
         }
 

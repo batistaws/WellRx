@@ -76,7 +76,7 @@ public class PacienteService {
     }
 
     public Paciente listarPorId(Long id, Usuario logado) {
-        var paciente = pacienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Recepcionista não encontrado"));
+        var paciente = pacienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
 
         validar.validarDonoOuAdmin(paciente.getUsuario().getId(),
                 logado,

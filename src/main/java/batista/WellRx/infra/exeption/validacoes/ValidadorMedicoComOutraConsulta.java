@@ -1,7 +1,7 @@
 package batista.WellRx.infra.exeption.validacoes;
 
 
-import batista.WellRx.clinica.controller.ConsultaRepository;
+import batista.WellRx.clinica.database.repository.ConsultaRepository;
 import batista.WellRx.clinica.dto.AgendamentoConsultaDto;
 import batista.WellRx.infra.exeption.RegraNegocioException;
 import org.springframework.stereotype.Component;

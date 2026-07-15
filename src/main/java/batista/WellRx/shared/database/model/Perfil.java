@@ -23,7 +23,7 @@ public class Perfil  implements GrantedAuthority {
     private PerfilEnum nome;
 
     @Override
-    public String getAuthority() {
+    public String getAuthority(){
         return "ROLE_" + nome;
     }
 }
