@@ -1,4 +1,4 @@
-package batista.WellRx.clinica.controller;
+package batista.WellRx.clinica.Paciente;
 
 
 import batista.WellRx.clinica.dto.*;
