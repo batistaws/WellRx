@@ -1,0 +1,1 @@
+ALTER TABLE exames ADD COLUMN data_agendada DATETIME NULL;
