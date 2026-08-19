@@ -2,6 +2,7 @@ package batista.WellRx.clinica.service;
 
 import batista.WellRx.clinica.database.model.*;
 import batista.WellRx.clinica.database.repository.PacienteRepository;
+import batista.WellRx.clinica.database.repository.ProntuarioRepository;
 import batista.WellRx.clinica.dto.*;
 import batista.WellRx.clinica.database.model.Paciente;
 import batista.WellRx.infra.email.EmailService;
@@ -32,8 +33,9 @@ public class PacienteService {
     private final PacienteRepository pacienteRepository;
     private final HierarquiaService hierarquiaService;
     private final ValidarPermissao validar;
+    private final ProntuarioRepository prontuarioRepository;
 
-    public PacienteService(PasswordEncoder passwordEncoder, UsuarioRepository usuarioRepository, EmailService emailService, PerfilRepository perfilRepository, PacienteRepository pacienteRepository, HierarquiaService hierarquiaService, ValidarPermissao validar) {
+    public PacienteService(PasswordEncoder passwordEncoder, UsuarioRepository usuarioRepository, EmailService emailService, PerfilRepository perfilRepository, PacienteRepository pacienteRepository, HierarquiaService hierarquiaService, ValidarPermissao validar, ProntuarioRepository prontuarioRepository) {
         this.passwordEncoder = passwordEncoder;
         this.usuarioRepository = usuarioRepository;
         this.emailService = emailService;
@@ -41,6 +43,7 @@ public class PacienteService {
         this.pacienteRepository = pacienteRepository;
         this.hierarquiaService = hierarquiaService;
         this.validar = validar;
+        this.prontuarioRepository = prontuarioRepository;
     }
 
     @Transactional
@@ -64,6 +67,11 @@ public class PacienteService {
         usuarioRepository.save(usuario);
 
         var paciente = new Paciente(dto, usuario);
+        var pacienteSalvo = pacienteRepository.save(paciente);
+
+        var prontuario = new Prontuario(paciente);
+        prontuarioRepository.save(prontuario);
+
         return pacienteRepository.save(paciente);
 
     }
@@ -91,5 +99,6 @@ public class PacienteService {
         validar.validarDonoOuAdmin(paciente.getUsuario().getId(), logado, "Você não tem permissão de atualizar informação de outro paciente");
         return paciente.atualizarInformacoes(dto);
     }
+
 
 }

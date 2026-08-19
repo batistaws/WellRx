@@ -1,10 +1,13 @@
 package batista.WellRx.clinica.database.repository;
 
 import batista.WellRx.clinica.database.model.Paciente;
+import batista.WellRx.shared.database.model.Usuario;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.Optional;
 
 public interface PacienteRepository extends JpaRepository <Paciente, Long>, JpaSpecificationExecutor<Paciente> {
 
@@ -15,4 +18,6 @@ public interface PacienteRepository extends JpaRepository <Paciente, Long>, JpaS
     WHERE p.id = :id
 """)
     Boolean findAtivoById(@NotNull Long id);
+
+    Optional<Paciente> findByUsuarioId(Long id);
 }

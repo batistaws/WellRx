@@ -74,7 +74,7 @@ public class ConsultaService {
 
         var consulta = consultaRepository.findById(dto.idConsulta()).orElseThrow(() -> new RegraNegocioException("Id da consulta não existe"));;
         if (hierarquiaService.usuarioNaoTemPermissao(logado, pacienteRepository.findById(consulta.getPaciente().getId()).orElseThrow(() -> new RegraNegocioException("Id do paciente não existe")).getUsuario(), "ROLE_RECEPCIONISTA")) {
-            throw new RegraNegocioException("Acesso negado: Apenas o paciente ou recepcionista podem agendar a consulta.");
+            throw new RegraNegocioException("Acesso negado: Apenas o paciente ou recepcionista podem agendar a consulta pra si mesmo.");
         }
         consulta.cancelar(dto.motivo());
         consultaRepository.save(consulta);

@@ -113,4 +113,6 @@ public class Usuario implements UserDetails {
     public void removerPerfil(Optional<Perfil> perfil) {
         perfis.remove(perfil.orElseThrow(() -> new RegraNegocioException("Perfil não encontrado!")));
     }
+
+
 }

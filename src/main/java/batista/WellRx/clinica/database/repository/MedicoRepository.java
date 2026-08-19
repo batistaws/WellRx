@@ -2,6 +2,7 @@ package batista.WellRx.clinica.database.repository;
 
 import batista.WellRx.clinica.database.model.Especialidade;
 import batista.WellRx.clinica.database.model.Medico;
+import batista.WellRx.shared.database.model.Usuario;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,4 +42,6 @@ public interface MedicoRepository extends JpaRepository<Medico, Long>, JpaSpecif
              WHERE m.id = :id
             """)
     boolean findAtivoById(Long id);
+
+    Optional<Medico> findByUsuarioId(Long id);
 }
