@@ -40,12 +40,12 @@ public class ExameService {
 
         var atendimento = atendimentoRepository.findById(atendimentoId).orElseThrow(() -> new RuntimeException("Atendimento não encontrado"));
 
-        if (!atendimento.getConsulta().getMedico().getUsuario().getId().equals(logado.getId())) {
-            throw new RuntimeException("Você não tem permissão para cadastrar prescrição para este atendimento");
+        if (!hierarquiaService.usuarioTemPermissao(logado,"ROLE_RECEPCIONISTA")) {
+            throw new RegraNegocioException("Médico não pode cadastrar exames.");
         }
 
-        var exames = new Exame(atendimento, dto.tipoExame(), LocalDateTime.now());
-
+        var exames = new Exame(atendimento, dto.tipoExame(), dto.dataAgendada());
+        exameRepository.save(exames);
         return new ListagemExameDto(exames);
     }
 
@@ -69,6 +69,7 @@ public class ExameService {
         var resultado = new ResultadoExame(exame, dto.laudo());
         resultadoExameRepository.save(resultado);
         exame.setStatus(StatusExame.REALIZADO);
+        exame.setResultadoExame(resultado);
 
         return new ListagemExameDto(exame);
     }
@@ -79,7 +80,7 @@ public class ExameService {
         var exame = exameRepository.findById(exameId)
                 .orElseThrow(() -> new RegraNegocioException("Exame não encontrado"));
 
-        if (!exame.getAtendimento().getMedico().getUsuario().getId().equals(logado.getId())) {
+        if (!exame.getAtendimento().getMedico().getUsuario().getId().equals(logado.getId()) ) {
             throw new RegraNegocioException("Apenas o médico responsável pode cancelar este exame.");
         }
 

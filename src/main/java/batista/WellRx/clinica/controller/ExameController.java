@@ -37,30 +37,35 @@ public class ExameController {
         return ResponseEntity.created(uri).body(exame);
     }
 
-    @PostMapping("/exames/{id}/resultado")
+    @PreAuthorize("hasRole('MEDICO')")
+    @PostMapping("/{id}/resultado")
     public ResponseEntity<ListagemExameDto> lancarResultado(@PathVariable Long id, @RequestBody @Valid LancarResultadoExameDto dto, @AuthenticationPrincipal Usuario logado) {
         var exame = service.lancarResultado(id, dto, logado);
         return ResponseEntity.ok(exame);
     }
 
-    @PutMapping("/exames/{id}/cancelar")
+    @PreAuthorize("hasRole('RECEPCIONISTA')")
+    @PutMapping("/{id}/cancelar")
     public ResponseEntity<ListagemExameDto> cancelar(@PathVariable Long id, @AuthenticationPrincipal Usuario logado) {
         var exame = service.cancelar(id, logado);
         return ResponseEntity.ok(exame);
     }
 
-    @GetMapping("/exames/{id}")
+    @PreAuthorize("hasRole('RECEPCIONISTA')")
+    @GetMapping("/{id}")
     public ResponseEntity<ListagemExameDto> detalhar(@PathVariable Long id) {
         var exame = service.detalhar(id);
         return ResponseEntity.ok(exame);
     }
-    @GetMapping("/exames")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping
     public ResponseEntity<Page<ListarExameDto>> listar(@PageableDefault(size = 20) Pageable paginacao, @AuthenticationPrincipal Usuario logado) {
         var exame = service.listar(logado, paginacao);
         return ResponseEntity.ok(exame);
     }
 
-    @GetMapping("/exames/usuario/{usuarioId}")
+    @PreAuthorize("hasRole('RECEPCIONISTA')")
+    @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<Page<ListarExameDto>> listarPorUsuarioId(@PathVariable Long usuarioId, @PageableDefault(size = 20) Pageable paginacao, @AuthenticationPrincipal Usuario logado) {
         var exame = service.listarPorUsuarioId(usuarioId, logado, paginacao);
         return ResponseEntity.ok(exame);

@@ -35,7 +35,7 @@ public class Exame {
     @Column(name = "data_solicitacao")
     private LocalDateTime dataSolicitacao;
 
-    @Column(name = "data_agendamento")
+    @Column(name = "data_agendada")
     private LocalDateTime dataAgendamento;
 
     @OneToOne(mappedBy = "exame", cascade = CascadeType.ALL)
@@ -46,6 +46,7 @@ public class Exame {
         this.tipo = tipo;
         this.status = StatusExame.AGENDADO  ;
         this.dataSolicitacao = LocalDateTime.now();
+        this.dataAgendamento = localDateTime;
     }
 
     public void cancelar() {
