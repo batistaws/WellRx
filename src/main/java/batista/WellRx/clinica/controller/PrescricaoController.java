@@ -35,7 +35,7 @@ public class PrescricaoController {
         return ResponseEntity.created(uri).body(prescricao);
     }
 
-    @PreAuthorize("hasRole('ROLE_MEDICO') or hasAuthority('ROLE_PACIENTE')")
+    @PreAuthorize("hasRole('MEDICO') or hasAuthority('PACIENTE')")
     @GetMapping("/detalhar/{id}")
     public ResponseEntity<ListagemPrescricaoDto> detalhar(@PathVariable Long id, @AuthenticationPrincipal Usuario logado) {
         var  prescricao = service.detalhar(id, logado);
