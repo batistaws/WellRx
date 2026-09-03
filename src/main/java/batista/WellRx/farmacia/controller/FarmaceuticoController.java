@@ -26,7 +26,6 @@ public class FarmaceuticoController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/cadastrar")
     public ResponseEntity<ListagemFarmaceuticoDto> cadastrar(@RequestBody @Valid CadastroFarmaceuticoDto dto, UriComponentsBuilder componentsBuilder, @AuthenticationPrincipal Usuario logado){
         var farmaceutico = service.cadastrar(dto, logado);
@@ -34,21 +33,18 @@ public class FarmaceuticoController {
         return ResponseEntity.created(uri).body(farmaceutico);
     }
 
-    @PreAuthorize("hasRole('RECEPCIONISTA')")
     @GetMapping("/listar")
     public ResponseEntity<Page<ListarFarmaceuticoDto>>listar(@PageableDefault(size = 10, sort = {"nomeCompleto"}) Pageable paginacao, @AuthenticationPrincipal Usuario logado) {
         var pagina = service.listar(paginacao, logado);
         return ResponseEntity.ok(pagina);
     }
 
-    @PreAuthorize("hasRole('FARMACEUTICO')")
     @GetMapping("/detalhar/{id}")
     public ResponseEntity<ListagemFarmaceuticoDto> detalhar(@PathVariable Long id, @AuthenticationPrincipal Usuario logado) {
         var farmaceutico = service.detalhar(id,logado);
         return ResponseEntity.ok(farmaceutico);
     }
 
-    @PreAuthorize("hasRole('FARMACEUTICO')")
     @PutMapping("/atualizar")
     public ResponseEntity<ListagemFarmaceuticoDto> atualizar(@RequestBody @Valid AtualizacaoFarmaceuticoDto dto, @AuthenticationPrincipal Usuario logado) {
         var farmaceutico = service.atualizar(dto, logado);

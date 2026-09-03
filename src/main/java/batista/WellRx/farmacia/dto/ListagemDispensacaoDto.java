@@ -1,4 +1,4 @@
-package batista.WellRx.farmacia.controller;
+package batista.WellRx.farmacia.dto;
 
 import batista.WellRx.farmacia.database.model.Dispensacao;
 

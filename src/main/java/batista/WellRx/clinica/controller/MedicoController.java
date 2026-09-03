@@ -24,28 +24,25 @@ public class MedicoController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/cadastrar")
     public ResponseEntity<ListagemMedicoDto> cadastrar(@RequestBody @Valid CadastroMedicoDto dto, UriComponentsBuilder componentsBuilder, @AuthenticationPrincipal Usuario logado) {
         var medico = service.cadastrar(dto, logado);
         var uri = componentsBuilder.path("/medicos/{nomeCompleto}").buildAndExpand(medico.getId()).toUri();
         return ResponseEntity.created(uri).body(new ListagemMedicoDto(medico));
     }
-    @PreAuthorize("hasRole('RECEPCIONISTA')")
+
     @GetMapping
     public ResponseEntity<Page<ListarMedicoDto>>listarMedico(@PageableDefault(size = 10, sort = {"nomeCompleto"}) Pageable paginacao, @AuthenticationPrincipal Usuario logado) {
         var pagina = service.listar(paginacao, logado);
         return ResponseEntity.ok(pagina);
     }
 
-    @PreAuthorize("hasRole('MEDICO')")
     @GetMapping("/{id}")
     public ResponseEntity<ListagemMedicoDto> detalharMedico(@PathVariable Long id, @AuthenticationPrincipal Usuario logado) {
         var medico = service.listarPorId(id,logado);
         return ResponseEntity.ok(new ListagemMedicoDto(medico));
     }
 
-    @PreAuthorize("hasRole('MEDICO')")
     @PutMapping("/atualizar")
     public ResponseEntity<ListagemMedicoDto> atualizar(@RequestBody @Valid AtualizacaoMedicoDto dto, @AuthenticationPrincipal Usuario logado) {
         var medico = service.atualizar(dto, logado);

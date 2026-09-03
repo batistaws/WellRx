@@ -20,14 +20,12 @@ public class EstoqueController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/medicamento/{medicamentoId}/repor")
     public ResponseEntity<ListagemEstoqueDto> reporEstoque(@PathVariable Long medicamentoId, @RequestBody @Valid ReposicaoEstoqueDto dto, @AuthenticationPrincipal Usuario logado) {
         var estoque = service.reporEstoque(medicamentoId, dto, logado);
         return ResponseEntity.ok(estoque);
     }
 
-    @PreAuthorize("hasRole('FARMACEUTICO')")
     @GetMapping("/medicamento/{medicamentoId}")
     public ResponseEntity<ListagemEstoqueDto> detalhar(@PathVariable Long medicamentoId) {
         return ResponseEntity.ok(service.detalharPorMedicamento(medicamentoId));

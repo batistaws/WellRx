@@ -27,14 +27,12 @@ public class ProntuarioController {
         return ResponseEntity.ok(prontuario);
     }
 
-    @PreAuthorize("hasRole('MEDICO')")
     @PostMapping("/paciente/{pacienteId}/alergias")
     public ResponseEntity<DetalharProntuarioDto> adicionarAlergia(@PathVariable Long pacienteId, @RequestBody @Valid CadastroAlergiaDto dto, @AuthenticationPrincipal Usuario logado) {
         var prontuario = service.adicionarAlergia(pacienteId, dto, logado);
         return ResponseEntity.ok(prontuario);
     }
 
-    @PreAuthorize("hasRole('MEDICO')")
     @PostMapping("/paciente/{pacienteId}/comorbidades")
     public ResponseEntity<DetalharProntuarioDto> adicionarComorbidade(@PathVariable Long pacienteId, @RequestBody @Valid CadastroComorbidadeDto dto, @AuthenticationPrincipal Usuario logado) {
         var prontuario = service.adicionarComorbidade(pacienteId, dto, logado);

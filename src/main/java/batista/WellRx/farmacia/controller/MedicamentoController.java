@@ -22,7 +22,6 @@ public class MedicamentoController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/cadastrar")
     public ResponseEntity<ListagemMedicamentoDto> cadastrar(
             @RequestBody @Valid CadastroMedicamentoDto dto,
@@ -33,13 +32,11 @@ public class MedicamentoController {
         return ResponseEntity.created(uri).body(medicamento);
     }
 
-    @PreAuthorize("hasAnyRole('FARMACEUTICO', 'MEDICO')")
     @GetMapping("/detalhar/{id}")
     public ResponseEntity<ListagemMedicamentoDto> detalhar(@PathVariable Long id) {
         return ResponseEntity.ok(service.detalhar(id));
     }
 
-    @PreAuthorize("hasAnyRole('FARMACEUTICO', 'MEDICO')")
     @GetMapping("/listar")
     public ResponseEntity<Page<ListagemMedicamentoDto>> listar(
             @RequestParam(required = false) String nome,

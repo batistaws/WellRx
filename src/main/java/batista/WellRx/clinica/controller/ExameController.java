@@ -29,7 +29,6 @@ public class ExameController {
         this.repository = repository;
     }
 
-    @PreAuthorize("hasRole('RECEPCIONISTA')")
     @PostMapping("/atendimentos/{atendimentoId}/exames")
     public ResponseEntity<ListagemExameDto> cadastrarExame(@AuthenticationPrincipal Usuario logado, @RequestBody @Valid CadastroExameDto dto, @PathVariable Long atendimentoId, UriComponentsBuilder componentsBuilder) {
         var exame = service.cadastrar(dto, logado, atendimentoId);
@@ -37,34 +36,30 @@ public class ExameController {
         return ResponseEntity.created(uri).body(exame);
     }
 
-    @PreAuthorize("hasRole('MEDICO')")
     @PostMapping("/{id}/resultado")
     public ResponseEntity<ListagemExameDto> lancarResultado(@PathVariable Long id, @RequestBody @Valid LancarResultadoExameDto dto, @AuthenticationPrincipal Usuario logado) {
         var exame = service.lancarResultado(id, dto, logado);
         return ResponseEntity.ok(exame);
     }
 
-    @PreAuthorize("hasRole('RECEPCIONISTA')")
     @PutMapping("/{id}/cancelar")
     public ResponseEntity<ListagemExameDto> cancelar(@PathVariable Long id, @AuthenticationPrincipal Usuario logado) {
         var exame = service.cancelar(id, logado);
         return ResponseEntity.ok(exame);
     }
 
-    @PreAuthorize("hasRole('RECEPCIONISTA')")
     @GetMapping("/{id}")
     public ResponseEntity<ListagemExameDto> detalhar(@PathVariable Long id) {
         var exame = service.detalhar(id);
         return ResponseEntity.ok(exame);
     }
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping
     public ResponseEntity<Page<ListarExameDto>> listar(@PageableDefault(size = 20) Pageable paginacao, @AuthenticationPrincipal Usuario logado) {
         var exame = service.listar(logado, paginacao);
         return ResponseEntity.ok(exame);
     }
 
-    @PreAuthorize("hasRole('RECEPCIONISTA')")
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<Page<ListarExameDto>> listarPorUsuarioId(@PathVariable Long usuarioId, @PageableDefault(size = 20) Pageable paginacao, @AuthenticationPrincipal Usuario logado) {
         var exame = service.listarPorUsuarioId(usuarioId, logado, paginacao);

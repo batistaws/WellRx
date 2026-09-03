@@ -26,14 +26,12 @@ public class ConsultaController {
         this.service = service;
     }
 
-    @PreAuthorize("hasAnyRole('PACIENTE','RECEPCIONISTA')")
     @GetMapping("/listar")
     public ResponseEntity<Page<ListarConsultaDto>> listarConsultas(@PageableDefault(size = 20) Pageable paginacao, @AuthenticationPrincipal Usuario logado) {
         var pagina = service.listar(paginacao,logado);
         return ResponseEntity.ok(pagina);
     }
 
-    @PreAuthorize("hasAnyRole('PACIENTE','RECEPCIONISTA')")
     @PostMapping("/agendar")
     public ResponseEntity<ListarConsultaDto> agendarConsulta(@RequestBody @Valid AgendamentoConsultaDto dto, UriComponentsBuilder uriBuilder, @AuthenticationPrincipal Usuario logado) {
 
@@ -42,14 +40,12 @@ public class ConsultaController {
         return ResponseEntity.ok(new ListarConsultaDto(consulta));
     }
 
-    @PreAuthorize("hasAnyRole('PACIENTE','RECEPCIONISTA')")
     @PutMapping("/cancelar/{id}")
     public ResponseEntity<Void> cancelarConsulta(@PathVariable @Valid CancelamentoConsultaDto dto, @AuthenticationPrincipal Usuario logado) {
         service.cancelar(dto, logado);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('PACIENTE','RECEPCIONISTA')")
     @GetMapping("/{id}")
     public ResponseEntity<DetalharConsultaDto> detalharConsulta(@PathVariable Long id, @AuthenticationPrincipal Usuario logado) {
         var consulta = service.detalhar(id, logado);

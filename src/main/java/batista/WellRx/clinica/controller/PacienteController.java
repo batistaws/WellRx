@@ -25,14 +25,12 @@ public class PacienteController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('_RECEPCIONISTA')")
     @GetMapping
     public ResponseEntity<Page<ListarPacienteDto>>listarPaciente(@PageableDefault(size = 10, sort = {"nomeCompleto"}) Pageable paginacao, @AuthenticationPrincipal Usuario logado) {
         var pagina = service.listar(paginacao,logado);
         return ResponseEntity.ok(pagina);
     }
 
-    @PreAuthorize("hasRole('PACIENTE')")
     @GetMapping("/{id}")
     public ResponseEntity<ListagemPacienteDto> detalharPaciente(@PathVariable Long id, @AuthenticationPrincipal Usuario logado) {
         var paciente = service.listarPorId(id,logado);

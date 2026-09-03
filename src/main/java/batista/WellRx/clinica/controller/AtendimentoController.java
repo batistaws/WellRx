@@ -26,7 +26,6 @@ public class AtendimentoController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('MEDICO')")
     @PostMapping("/{consultaId}/atendimento")
     public ResponseEntity<ListagemAtendimentoDto> cadastrarAtendimento(@PathVariable Long consultaId, @RequestBody @Valid CadastroAtendimentoDto dto, UriComponentsBuilder componentsBuilder, @AuthenticationPrincipal Usuario logado) {
         var atendimento = service.cadastrar(dto, logado, consultaId);

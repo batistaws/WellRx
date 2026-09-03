@@ -1,15 +1,14 @@
 package batista.WellRx.farmacia.service;
 
 import batista.WellRx.clinica.database.repository.ItemPrescricaoRepository;
-import batista.WellRx.farmacia.controller.DispensacaoDto;
-import batista.WellRx.farmacia.controller.ListagemDispensacaoDto;
+import batista.WellRx.farmacia.dto.DispensacaoDto;
+import batista.WellRx.farmacia.dto.ListagemDispensacaoDto;
 import batista.WellRx.farmacia.database.model.Dispensacao;
 import batista.WellRx.farmacia.database.repository.DispensacaoRepository;
 import batista.WellRx.farmacia.database.repository.EstoqueRepository;
 import batista.WellRx.farmacia.database.repository.FarmaceuticoRepository;
 import batista.WellRx.infra.exeption.RegraNegocioException;
 import batista.WellRx.shared.database.model.Usuario;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

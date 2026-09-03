@@ -27,7 +27,6 @@ public class PrescricaoController {
     }
 
 
-    @PreAuthorize("hasRole('MEDICO')")
     @PostMapping("/cadastrar/{idAtendimento}")
     public ResponseEntity<ListagemPrescricaoDto> cadastrar(@PathVariable Long idAtendimento, UriComponentsBuilder componentsBuilder, @AuthenticationPrincipal Usuario logado, @Valid @RequestBody CadastroPrescricaoDto dto) {
         var prescricao = service.cadastrar(dto, logado, idAtendimento);
@@ -35,7 +34,6 @@ public class PrescricaoController {
         return ResponseEntity.created(uri).body(prescricao);
     }
 
-    @PreAuthorize("hasRole('MEDICO') or hasAuthority('PACIENTE')")
     @GetMapping("/detalhar/{id}")
     public ResponseEntity<ListagemPrescricaoDto> detalhar(@PathVariable Long id, @AuthenticationPrincipal Usuario logado) {
         var  prescricao = service.detalhar(id, logado);

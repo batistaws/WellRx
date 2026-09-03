@@ -27,20 +27,17 @@ public class RecepcionistaController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<Page<ListarRecepcionistaDto>>litarRecepcionistas(@PageableDefault(size = 10, sort = {"nomeCompleto"}) Pageable paginacao) {
         var pagina = service.listar(paginacao);
         return ResponseEntity.ok(pagina);
     }
-    @PreAuthorize("hasRole('RECEPCIONISTA')")
     @GetMapping("/{id}")
     public ResponseEntity<ListagemRecepcionistaDto> detalharRecepcionista(@PathVariable Long id, @AuthenticationPrincipal Usuario logado) {
         var recepcionista = service.listarPorId(id, logado);
         return ResponseEntity.ok(new ListagemRecepcionistaDto(recepcionista));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/cadastrar")
     public ResponseEntity<ListagemRecepcionistaDto> cadastrar(@RequestBody @Valid CadastroRecepcionistaDto dto, UriComponentsBuilder componentsBuilder, @AuthenticationPrincipal Usuario logado) {
         var recepcionista = service.cadastrar(dto, logado);
@@ -48,7 +45,6 @@ public class RecepcionistaController {
         return ResponseEntity.created(uri).body(new ListagemRecepcionistaDto(recepcionista));
     }
 
-    @PreAuthorize("hasRole('RECEPCIONISTA')")
     @PutMapping("/atualizar")
     public ResponseEntity<ListagemRecepcionistaDto> atualizar(@RequestBody @Valid AtualizacaoRecepcionistaDto dto, @AuthenticationPrincipal Usuario logado) {
         var recepcionista = service.atualizar(dto,logado);

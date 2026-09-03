@@ -45,8 +45,77 @@ public class ConfigSecurity {
         return httpSecurity
                 .authorizeHttpRequests(
                         req -> {
+
                             req.requestMatchers("/usuarios/login", "/usuarios/atualizar-token", "/usuarios/verificar-conta", "/pacientes/cadastrar").permitAll();
 
+                            // ==================== CONSULTAS ====================
+                            req.requestMatchers(HttpMethod.GET, "/consultas/listar").hasAnyRole("PACIENTE", "RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.POST, "/consultas/agendar").hasAnyRole("PACIENTE", "RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.PUT, "/consultas/cancelar/*").hasAnyRole("PACIENTE", "RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.GET, "/consultas/*").hasAnyRole("PACIENTE", "RECEPCIONISTA");
+
+                            // ==================== ATENDIMENTOS ====================
+                            req.requestMatchers(HttpMethod.POST, "/atendimentos/*/atendimento").hasRole("MEDICO");
+                            req.requestMatchers(HttpMethod.GET, "/atendimentos/listar").hasRole("RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.GET, "/atendimentos/listar/*").hasRole("RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.GET, "/atendimentos/*").hasRole("RECEPCIONISTA");
+
+                            // ==================== PRESCRIÇÃO ====================
+                            req.requestMatchers(HttpMethod.POST, "/prescricao/cadastrar/*").hasRole("MEDICO");
+                            req.requestMatchers(HttpMethod.GET, "/prescricao/detalhar/*").hasAnyRole("MEDICO", "PACIENTE");
+                            req.requestMatchers(HttpMethod.GET, "/prescricao/listar").authenticated();
+                            req.requestMatchers(HttpMethod.GET, "/prescricao/listar/*").hasRole("RECEPCIONISTA");
+
+                            // ==================== PRONTUÁRIO ====================
+                            req.requestMatchers(HttpMethod.POST, "/prontuarios/paciente/*/alergias").hasRole("MEDICO");
+                            req.requestMatchers(HttpMethod.POST, "/prontuarios/paciente/*/comorbidades").hasRole("MEDICO");
+                            req.requestMatchers(HttpMethod.GET, "/prontuarios/paciente/*").authenticated();
+
+                            // ==================== MÉDICOS ====================
+                            req.requestMatchers(HttpMethod.POST, "/medicos/cadastrar").hasRole("ADMIN");
+                            req.requestMatchers(HttpMethod.PUT, "/medicos/atualizar").hasRole("MEDICO");
+                            req.requestMatchers(HttpMethod.GET, "/medicos").hasRole("RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.GET, "/medicos/*").hasRole("MEDICO");
+
+                            // ==================== PACIENTES ====================
+                            req.requestMatchers(HttpMethod.GET, "/pacientes").hasRole("RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.PUT, "/pacientes/atualizar").authenticated();
+                            req.requestMatchers(HttpMethod.GET, "/pacientes/*").hasRole("PACIENTE");
+
+                            // ==================== EXAMES ====================
+                            req.requestMatchers(HttpMethod.POST, "/exames/atendimentos/*/exames").hasRole("RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.POST, "/exames/*/resultado").hasRole("MEDICO");
+                            req.requestMatchers(HttpMethod.PUT, "/exames/*/cancelar").hasRole("RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.GET, "/exames/usuario/*").hasRole("RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.GET, "/exames/*").hasRole("RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.GET, "/exames").hasRole("ADMIN");
+
+                            // ==================== RECEPCIONISTAS ====================
+                            req.requestMatchers(HttpMethod.POST, "/recepcionistas/cadastrar").hasRole("ADMIN");
+                            req.requestMatchers(HttpMethod.PUT, "/recepcionistas/atualizar").hasRole("RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.GET, "/recepcionistas").hasRole("ADMIN");
+                            req.requestMatchers(HttpMethod.GET, "/recepcionistas/*").hasRole("RECEPCIONISTA");
+
+                            // ==================== FARMÁCIA - ESTOQUE ====================
+                            req.requestMatchers(HttpMethod.POST, "/estoques/medicamento/*/repor").hasRole("ADMIN");
+                            req.requestMatchers(HttpMethod.GET, "/estoques/medicamento/*").hasRole("FARMACEUTICO");
+
+                            // ==================== FARMÁCIA - MEDICAMENTO ====================
+                            req.requestMatchers(HttpMethod.POST, "/medicamentos/cadastrar").hasRole("ADMIN");
+                            req.requestMatchers(HttpMethod.GET, "/medicamentos/detalhar/*").hasAnyRole("FARMACEUTICO", "MEDICO");
+                            req.requestMatchers(HttpMethod.GET, "/medicamentos/listar").hasAnyRole("FARMACEUTICO", "MEDICO");
+
+                            // ==================== FARMÁCIA - DISPENSAÇÃO ====================
+                            req.requestMatchers(HttpMethod.POST, "/dispensacao/itens-prescricao/*/dispensacao").hasRole("FARMACEUTICO");
+                            req.requestMatchers(HttpMethod.GET, "/dispensacao/detalhar/*").hasRole("FARMACEUTICO");
+
+                            // ==================== FARMÁCIA - FARMACÊUTICO ====================
+                            req.requestMatchers(HttpMethod.POST, "/farmaceuticos/cadastrar").hasRole("ADMIN");
+                            req.requestMatchers(HttpMethod.GET, "/farmaceuticos/listar").hasRole("RECEPCIONISTA");
+                            req.requestMatchers(HttpMethod.GET, "/farmaceuticos/detalhar/*").hasRole("FARMACEUTICO");
+                            req.requestMatchers(HttpMethod.PUT, "/farmaceuticos/atualizar").hasRole("FARMACEUTICO");
+
+                            // ==================== QUALQUER OUTRA ROTA ====================
                             req.anyRequest().authenticated();
 
                 })

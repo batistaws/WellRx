@@ -1,5 +1,7 @@
 package batista.WellRx.farmacia.controller;
 
+import batista.WellRx.farmacia.dto.DispensacaoDto;
+import batista.WellRx.farmacia.dto.ListagemDispensacaoDto;
 import batista.WellRx.farmacia.service.DispensacaoService;
 import batista.WellRx.shared.database.model.Usuario;
 import jakarta.validation.Valid;
@@ -19,9 +21,8 @@ public class DispensasaoController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('FARMACEUTICO')")
     @PostMapping("/itens-prescricao/{itemPrescricaoId}/dispensacao")
-    public ResponseEntity<ListagemDispensacaoDto>dispensar(@RequestBody @Valid DispensacaoDto dto,@PathVariable Long itemPrescricaoId, UriComponentsBuilder componentsBuilder, @AuthenticationPrincipal Usuario logado) {
+    public ResponseEntity<ListagemDispensacaoDto>dispensar(@RequestBody @Valid DispensacaoDto dto, @PathVariable Long itemPrescricaoId, UriComponentsBuilder componentsBuilder, @AuthenticationPrincipal Usuario logado) {
         var dispensacao = service.dispensar(itemPrescricaoId,dto, logado );
         var uri = componentsBuilder.path("/dispensacao/{id}").buildAndExpand(dispensacao.id()).toUri();
         return ResponseEntity.ok(dispensacao);

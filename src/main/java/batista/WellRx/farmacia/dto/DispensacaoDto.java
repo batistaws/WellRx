@@ -1,4 +1,4 @@
-package batista.WellRx.farmacia.controller;
+package batista.WellRx.farmacia.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
