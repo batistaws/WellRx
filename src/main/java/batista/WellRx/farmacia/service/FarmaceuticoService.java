@@ -63,7 +63,7 @@ public class FarmaceuticoService {
             }
 
             String senhaCriptografada = passwordEncoder.encode(dto.senha());
-            var perfil = perfilRepository.findByNome(PerfilEnum.MEDICO)
+            var perfil = perfilRepository.findByNome(PerfilEnum.FARMACEUTICO)
                     .orElseThrow(() -> new RegraNegocioException("Perfil não encontrado"));
             var usuario = new Usuario(dto, senhaCriptografada, perfil);
             emailService.enviarEmailVerificacao(usuario);
