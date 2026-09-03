@@ -9,6 +9,7 @@ import batista.WellRx.clinica.database.repository.PrescricaoRepository;
 import batista.WellRx.clinica.database.model.ItemPrescricao;
 import batista.WellRx.clinica.database.model.Prescricao;
 import batista.WellRx.clinica.database.repository.AtendimentoRepository;
+import batista.WellRx.farmacia.database.repository.MedicamentoRepository;
 import batista.WellRx.infra.exeption.RegraNegocioException;
 import batista.WellRx.shared.database.model.Usuario;
 import batista.WellRx.shared.service.HierarquiaService;
@@ -26,13 +27,15 @@ public class PrescricaoService {
     private final HierarquiaService hierarquiaService;
     private final MedicoRepository medicoRepository;
     private final PacienteRepository pacienteRepository;
+    private final MedicamentoRepository medicamentoRepository;
 
-    public PrescricaoService(AtendimentoRepository atendimentoRepository, PrescricaoRepository prescricaoRepository, HierarquiaService hierarquiaService, MedicoRepository medicoRepository, PacienteRepository pacienteRepository) {
+    public PrescricaoService(AtendimentoRepository atendimentoRepository, PrescricaoRepository prescricaoRepository, HierarquiaService hierarquiaService, MedicoRepository medicoRepository, PacienteRepository pacienteRepository, MedicamentoRepository medicamentoRepository) {
         this.atendimentoRepository = atendimentoRepository;
         this.prescricaoRepository = prescricaoRepository;
         this.hierarquiaService = hierarquiaService;
         this.medicoRepository = medicoRepository;
         this.pacienteRepository = pacienteRepository;
+        this.medicamentoRepository = medicamentoRepository;
     }
 
     @Transactional
@@ -41,14 +44,16 @@ public class PrescricaoService {
         var atendimento = atendimentoRepository.findById(idAtendimento).orElseThrow(() -> new RuntimeException("Atendimento não encontrado"));
 
         if (!atendimento.getConsulta().getMedico().getUsuario().getId().equals(logado.getId())) {
-            throw new RuntimeException("Você não tem permissão para cadastrar prescrição para este atendimento");
+            throw new RegraNegocioException("Você não tem permissão para cadastrar prescrição para este atendimento");
         }
 
         var prescricao = new Prescricao(atendimento, dto.observacao());
         prescricaoRepository.save(prescricao);
 
         dto.itens().forEach(itemDto -> {
-            new ItemPrescricao(prescricao, itemDto.medicamento(), itemDto.dosagem(), itemDto.posologia(), itemDto.duracaoDias());
+            var medicamento = medicamentoRepository.findById(itemDto.medicamentoId())
+                    .orElseThrow(() -> new RegraNegocioException("Medicamento não encontrado"));
+            new ItemPrescricao(prescricao, medicamento,  itemDto.dosagem(), itemDto.posologia(), itemDto.duracaoDias());
 
         });
         return new ListagemPrescricaoDto(prescricao);

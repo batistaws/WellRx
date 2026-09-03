@@ -1,5 +1,6 @@
 package batista.WellRx.clinica.database.model;
 
+import batista.WellRx.farmacia.database.model.Medicamento;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,14 +21,17 @@ public class ItemPrescricao {
     @JoinColumn(name = "prescricao_id")
     private Prescricao prescricao;
 
-    private String medicamento;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "medicamento_id")
+    private Medicamento medicamento;
+
     private String dosagem;
     private String posologia;
 
     @Column(name = "duracao_dias")
     private Integer duracaoDias;
 
-    public ItemPrescricao(Prescricao prescricao, String medicamento, String dosagem,
+    public ItemPrescricao(Prescricao prescricao, Medicamento medicamento, String dosagem,
                           String posologia, Integer duracaoDias) {
         this.prescricao = prescricao;
         this.medicamento = medicamento;

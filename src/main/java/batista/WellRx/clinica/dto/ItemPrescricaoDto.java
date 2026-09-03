@@ -4,12 +4,17 @@ import batista.WellRx.clinica.database.model.ItemPrescricao;
 
 public record ItemPrescricaoDto(
 
-        String medicamento,
+        Long idMedicamento,
+        String nomeMedicamento,
         String dosagem,
         String posologia,
         Integer duracaoDias) {
 
     public ItemPrescricaoDto(ItemPrescricao item) {
-        this(item.getMedicamento(), item.getDosagem(), item.getPosologia(), item.getDuracaoDias());
+        this(item.getMedicamento().getId(),
+                item.getMedicamento().getNome(),
+                item.getDosagem(),
+                item.getPosologia(),
+                item.getDuracaoDias());
     }
 }
