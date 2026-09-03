@@ -1,5 +1,10 @@
 package batista.WellRx.infra.seguranca;
 
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +43,21 @@ public class ConfigSecurity {
         this.securityFilter = securityFilter;
     }
 
-
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .components(new Components()
+                        .addSecuritySchemes("bearer-key",
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")))
+                .info(new Info()
+                        .title("WellRx API")
+                        .description("API REST para gestão clínica")
+                        .version("v1.0"))
+                .addSecurityItem(new SecurityRequirement().addList("bearer-key"));
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -46,6 +65,12 @@ public class ConfigSecurity {
                 .authorizeHttpRequests(
                         req -> {
 
+                            req.requestMatchers(
+                                    "/v3/api-docs/**",
+                                    "/swagger-ui/**",
+                                    "/swagger-ui.html",
+                                    "/swagger-resources/**",
+                                    "/webjars/**").permitAll();
                             req.requestMatchers("/usuarios/login", "/usuarios/atualizar-token", "/usuarios/verificar-conta", "/pacientes/cadastrar").permitAll();
 
                             // ==================== CONSULTAS ====================
