@@ -22,7 +22,8 @@ public class EmailService {
 
     private static final String NOME_ENVIADOR = "Well Rx";
 
-    public static final String URL_SITE = "http://localhost:8080";
+    @Value("${app.base-url:http://localhost:8080}")
+    private String URL_SITE;
 
     public EmailService(JavaMailSender enviadorEmail) {
         this.enviadorEmail = enviadorEmail;
@@ -35,7 +36,7 @@ public class EmailService {
                 + "Por favor clique no link abaixo para verificar sua conta:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFICAR</a></h3>"
                 + "Obrigado,<br>"
-                + "Fórum Hub :).", usuario.getNomeCompleto(), URL_SITE + "/usuarios/verificar-conta?token=" + usuario.getToken());
+                + "WellRx :).", usuario.getNomeCompleto(), URL_SITE + "/usuarios/verificar-conta?token=" + usuario.getToken());
 
         enviarEmail(usuario.getEmail(), assunto, conteudo);
     }
