@@ -88,6 +88,8 @@ Em nenhum ponto do código há `Statement` puro ou `@Query(nativeQuery = true)` 
 | Documentação da API | Swagger / OpenAPI |
 | Build | Maven |
 | Utilitários | Lombok |
+| Containerização | Docker (build multi-stage) |
+| Cloud / Deploy | AWS Elastic Beanstalk, AWS RDS |
 
 ---
 
@@ -118,12 +120,30 @@ modulo/
 
 ---
 
+## ☁️ Deploy e Infraestrutura
+
+A aplicação está containerizada com **Docker** e implantada na **AWS**, com banco de dados desacoplado da aplicação — uma prática essencial para que os dados sobrevivam independentemente do ciclo de vida da instância que roda o código.
+
+- **Imagem Docker** — build multi-stage: um estágio compila o projeto com Maven, o outro roda apenas o `.jar` final sobre uma imagem JRE enxuta (`eclipse-temurin:17-jre-alpine`), executando com um usuário não-root por segurança.
+- **AWS Elastic Beanstalk** — orquestra o provisionamento e a execução do container em produção, com variáveis de ambiente (credenciais de banco, e-mail, JWT) configuradas fora do código-fonte.
+- **AWS RDS (MySQL)** — banco de dados gerenciado, separado da aplicação, sem acesso público direto (`Publicly accessible: No`), acessível apenas pelo Security Group do ambiente da aplicação.
+
+Essa separação entre aplicação (efêmera, pode ser recriada a qualquer momento pelo Beanstalk) e banco de dados (persistente, no RDS) evita perda de dados em caso de reinicialização ou substituição da instância da aplicação.
+
+---
+
 ## 📖 Documentação da API
 
-Com a aplicação em execução, a documentação interativa fica disponível em:
+Com a aplicação em execução localmente, a documentação interativa fica disponível em:
 
 ```
 http://localhost:8080/swagger-ui.html
+```
+
+A aplicação também está em execução na AWS, com a documentação acessível publicamente em:
+
+```
+http://wellrx-env.eba-hucxp6zp.us-east-2.elasticbeanstalk.com/swagger-ui/index.html
 ```
 
 ---
@@ -134,6 +154,8 @@ http://localhost:8080/swagger-ui.html
 - [ ] Testes automatizados com JUnit e Mockito
 - [ ] Anonimização de dados para conformidade com o direito ao esquecimento (LGPD)
 - [ ] Geração de receituário em PDF para impressão/entrega ao paciente
+- [ ] HTTPS via Load Balancer com certificado gerenciado (AWS ACM)
+- [ ] CI/CD para deploy automático a cada push na branch principal
 
 ---
 
